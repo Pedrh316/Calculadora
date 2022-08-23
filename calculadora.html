@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            text-align: center;
+            font-family: arial;
+            display: grid;
+            place-items: center;
+            height: 100vh;
+        }
+
+        .calculadora {
+            background-color: hsl(0, 0%, 50%);
+            border-radius: 1rem;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: 60px;
+            grid-auto-rows: 70px;
+            gap: .3rem;
+            width: 300px;
+        }
+
+        .calculadora>* {
+            font-size: 20px;
+            border-radius: .5rem;
+            border: none;
+        }
+
+        .calculadora input {
+            text-align: right;
+            padding: .3rem;
+            grid-column-start: 1;
+            grid-column-end: 5;
+            letter-spacing: 1px;
+        }
+
+        .calculadora #equal {
+            grid-column-start: 4;
+            grid-column-end: 5;
+            grid-row-start: 5;
+            grid-row-end: 7;
+        }
+
+        .calculadora #zero {
+            grid-column-start: 1;
+            grid-column-end: 3;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <article class="calculadora">
+        <input type="text">
+        <button class="symbol" id="clean">C</button>
+        <button class="symbol">.</button>
+        <button class="symbol">/</button>
+        <button class="symbol">+</button>
+        <button class="number">1</button>
+        <button class="number">2</button>
+        <button class="number">3</button>
+        <button class="symbol">-</button>
+        <button class="number">4</button>
+        <button class="number">5</button>
+        <button class="number">6</button>
+        <button class="symbol">*</button>
+        <button class="number">7</button>
+        <button class="number">8</button>
+        <button class="number">9</button>
+        <button class="number" id="zero">0</button>
+        <button class="symbol">%</button>
+        <button onclick="result()" id="equal">=</button>
+    </article>
+
+    <script>
+        let input = document.querySelector('input');
+        input.value = "";
+
+        let btnNumber = [...document.querySelectorAll('.number')];
+        let btnSymbol = [...document.querySelectorAll('.symbol')];
+
+        btnNumber.forEach(el => el.addEventListener('click', addNumber))
+        btnSymbol.forEach(el => el.addEventListener("click", addSymbol))
+
+        function addNumber(e) {
+            input.value += e.target.textContent;
+        }
+        function addSymbol(e) {
+            switch (e.target.textContent) {
+                case '+':
+                    input.value += '+'
+                    break;
+                case '-':
+                    input.value += '-'
+                    break;
+                case '*':
+                    input.value += '*'
+                    break;
+                case '/':
+                    input.value += '/'
+                    break;
+                case 'C':
+                    input.value = '';
+                    break;
+            }
+        }
+
+
+        function result() {
+            let resultado = 0;
+            let indicePosterior = 0;
+
+            let valorInput = input.value;
+            let eachDate = valorInput.split('');
+            let arrNumbers = valorInput.split(/\D/g);
+            resultado += +arrNumbers[0];
+
+            calcular()
+            function calcular() {
+                eachDate.forEach((caracteres) => {
+                    switch (caracteres) {
+                        case '+':
+                            indicePosterior++
+                            resultado += +arrNumbers[indicePosterior];
+                            break;
+                        case '-':
+                            indicePosterior++
+                            resultado -= +arrNumbers[indicePosterior];
+                            break;
+                        case '*':
+                            indicePosterior++
+                            resultado *= +arrNumbers[indicePosterior];
+                            break;
+                        case '/':
+                            indicePosterior++
+                            resultado /= +arrNumbers[indicePosterior];
+                            break;
+                    }
+                })
+                console.log(resultado);
+            }
+            input.value = resultado;
+        }
+
+    </script>
+
+</body>
+
+</html>
